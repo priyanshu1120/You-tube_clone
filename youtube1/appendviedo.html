@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You Tube</title>
+    <link rel="stylesheet" href="./index.css">
+
+    <style>
+        iframe{
+            width:1020px;
+            position: sticky;
+        
+           height:500px;
+           margin-top: 40px;
+           margin-left: 40px;
+
+        }
+
+    </style>
+</head>
+
+
+<body onload='playVideo()'>
+
+    <div id="navbar">
+        <div><img src="https://previews.123rf.com/images/pytyczech/pytyczech1802/pytyczech180200242/96360239-three-bar-line-icon.jpg" id="icon" alt="icon"></div>
+        <div><img src="https://finalboss.io/wp-content/uploads/2020/10/youtube-logo-new.jpg" alt="logo"></div>
+        <div>
+            <input type="text" placeholder="Search"  id="query">
+            <button onclick="search()"><img src="search.png" alt="search icon"></button> 
+        </div>
+        <div> <img src="voice.png" alt="speak icon"> </div>
+        <div> <img src="viedo.png" alt="viedo icon"> </div>
+        <div> <img src="application.png" alt="app icon"> </div>
+        <div> <img src="bell.png" alt="bell icon"> </div>
+       </div>
+
+ 
+
+
+
+
+    <iframe id="play_video" title="YouTube video player"
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+       
+        <div id="container"></div>
+        <div id="box"></div>
+
+</body>
+
+</html>
+<script>
+  
+  let q;
+let search = async ()=>{
+    let query = document.getElementById("query").value;
+    let data = await getData(query);
+    
+    q=data;
+    append(data)
+
+    
+    
+    }
+
+    // https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&regionCode=In&key=AIzaSyD4pgJWOw4g5QRFe0vWcMKWNuKHOIJAhAs
+    // https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=IN&maxResults=20&key=AIzaSyD4pgJWOw4g5QRFe0vWcMKWNuKHOIJAhAs
+
+    let getData = async (query) => {
+        let url = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${query}&key=AIzaSyD4pgJWOw4g5QRFe0vWcMKWNuKHOIJAhAs`; 
+      
+        let res = await  fetch(url)
+       let data = await res.json();
+           return (data.items);
+    //    console.log(data.items);
+    
+    };
+
+    let append  =  (data)=>{
+        let container = document.getElementById("container")
+             container.innerHTML=null;
+         
+        data.forEach((el)=>{
+            // snippet ==> title
+            //snippet ==> thumbnails----> medium------>url
+        
+            let img = document.createElement("img");
+            img.src= el.snippet.thumbnails.medium.url;
+    
+            let h3 = document.createElement("h3")
+            h3.innerText = el.snippet.title;
+            let div = document.createElement("div");
+            div.setAttribute("class","video")
+            
+            div.onclick = ()=>{
+                saveViedo(el);
+          
+            }
+
+
+
+            div.append(img,h3)
+            container.append(div);
+        })
+    }
+
+    
+    let saveViedo =(data)=>{
+        localStorage.setItem("video",JSON.stringify(data));
+        window.location.href = "appendviedo.html";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    let playVideo = ()=>{
+        let video = JSON.parse(localStorage.getItem("video"));
+   
+        let {
+            id:{
+                videoId
+            }
+        }=video;
+        // let id = videoId
+        let id ;
+       if(id=video.id.videoId){
+
+        let play_video = document.getElementById("play_video");
+        play_video.src =` https://www.youtube.com/embed/${id}`;
+       }
+
+     else if(id=video.id){
+        let play_video = document.getElementById("play_video");
+        play_video.src =` https://www.youtube.com/embed/${id}`;
+     }
+
+        console.log(id)
+
+    }
+
+
+
+
+
+</script>
