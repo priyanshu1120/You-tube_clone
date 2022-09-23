@@ -22,9 +22,9 @@
 
 ## learning
 - in this project i learnt how to fetch the data from api
-- use the fetch funtion and get the data
-- how to use debouncing. and geting the suggestion according to search 
-- i used the iframe tegs for playing the video
+- use the fetch function and get the data
+- how to use debouncing. and getting the suggestion according to search 
+- I used the iframe tegs for playing the video
 
 Thanks
 
